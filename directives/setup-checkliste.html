@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Setup-Checkliste · So arbeiten wir hier</title>
+  <style>
+    :root {
+      --bg: #f6f7f9;
+      --card: #ffffff;
+      --ink: #1c2330;
+      --muted: #5c6675;
+      --line: #e4e7ec;
+      --accent: #4f46e5;
+      --accent-soft: #eef0fd;
+      --done: #16a34a;
+      --done-soft: #e9f7ee;
+      --radius: 14px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+    .wrap {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 48px 20px 80px;
+    }
+    header { margin-bottom: 28px; }
+    h1 {
+      font-size: 28px;
+      margin: 0 0 6px;
+      letter-spacing: -0.02em;
+    }
+    .subtitle { color: var(--muted); margin: 0; font-size: 16px; }
+
+    /* Fortschritt */
+    .progress-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      margin: 24px 0 28px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .progress-text { font-weight: 600; white-space: nowrap; font-variant-numeric: tabular-nums; }
+    .bar {
+      flex: 1;
+      height: 10px;
+      background: var(--line);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--accent);
+      border-radius: 999px;
+      transition: width 0.35s ease, background 0.35s ease;
+    }
+    .bar-fill.complete { background: var(--done); }
+    .reset {
+      border: 1px solid var(--line);
+      background: var(--card);
+      color: var(--muted);
+      font-size: 13px;
+      padding: 7px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.15s, color 0.15s;
+    }
+    .reset:hover { background: var(--bg); color: var(--ink); }
+
+    /* Schritte */
+    .step {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      margin-bottom: 14px;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .step.done {
+      background: var(--done-soft);
+      border-color: #bfe6cb;
+    }
+    .step label.box {
+      flex-shrink: 0;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      margin-top: 2px;
+    }
+    .step input[type="checkbox"] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 24px;
+      height: 24px;
+      border: 2px solid #c4cad4;
+      border-radius: 7px;
+      cursor: pointer;
+      position: relative;
+      transition: background 0.15s, border-color 0.15s;
+      background: #fff;
+    }
+    .step input[type="checkbox"]:checked {
+      background: var(--done);
+      border-color: var(--done);
+    }
+    .step input[type="checkbox"]:checked::after {
+      content: "";
+      position: absolute;
+      left: 7px;
+      top: 3px;
+      width: 6px;
+      height: 11px;
+      border: solid #fff;
+      border-width: 0 2.5px 2.5px 0;
+      transform: rotate(45deg);
+    }
+    .step-body { flex: 1; min-width: 0; }
+    .step-num {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-soft);
+      padding: 2px 8px;
+      border-radius: 6px;
+      margin-bottom: 8px;
+    }
+    .step.done .step-num { color: var(--done); background: #d6f0de; }
+    .step-title {
+      font-size: 17px;
+      font-weight: 600;
+      margin: 0 0 4px;
+    }
+    .step.done .step-title {
+      text-decoration: line-through;
+      text-decoration-color: rgba(22,163,74,0.5);
+      color: var(--muted);
+    }
+    .step p { margin: 6px 0 0; color: var(--muted); font-size: 15px; }
+    .step a { color: var(--accent); font-weight: 500; word-break: break-word; }
+    .step a:hover { text-decoration: underline; }
+    .btn-link {
+      display: inline-block;
+      margin-top: 10px;
+      background: var(--accent);
+      color: #fff !important;
+      text-decoration: none !important;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 8px 14px;
+      border-radius: 8px;
+      transition: filter 0.15s;
+    }
+    .btn-link:hover { filter: brightness(1.08); }
+
+    .note {
+      margin-top: 12px;
+      background: #fff8e6;
+      border: 1px solid #f5e2a8;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 14px;
+      color: #7a5c12;
+    }
+    .note strong { color: #6a4f0a; }
+
+    /* Abschluss */
+    .finish {
+      margin-top: 30px;
+      background: linear-gradient(135deg, #4f46e5, #6d62f0);
+      color: #fff;
+      border-radius: var(--radius);
+      padding: 26px 24px;
+    }
+    .finish h2 { margin: 0 0 10px; font-size: 20px; }
+    .finish p { margin: 0 0 12px; opacity: 0.95; }
+    .finish ol { margin: 0; padding-left: 20px; }
+    .finish li { margin-bottom: 8px; }
+    .finish .pill {
+      display: inline-block;
+      background: rgba(255,255,255,0.18);
+      padding: 1px 8px;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+    /* Praxistipps */
+    .tips {
+      margin-top: 30px;
+    }
+    .tips h2 {
+      font-size: 22px;
+      margin: 0 0 6px;
+      letter-spacing: -0.02em;
+    }
+    .tips > p.lead { color: var(--muted); margin: 0 0 18px; }
+    .tip {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--accent);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      margin-bottom: 12px;
+    }
+    .tip h3 {
+      margin: 0 0 6px;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .tip .ic { font-size: 18px; }
+    .tip p { margin: 4px 0 0; color: var(--muted); font-size: 15px; }
+    .tip code {
+      background: var(--accent-soft);
+      color: var(--accent);
+      padding: 1px 6px;
+      border-radius: 5px;
+      font-size: 13px;
+      font-family: "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .tip strong { color: var(--ink); }
+    footer {
+      margin-top: 40px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Setup-Checkliste</h1>
+      <p class="subtitle">So richtest du deine Arbeitsumgebung ein – Schritt für Schritt zum einsatzbereiten Projekt.</p>
+    </header>
+
+    <div class="progress-card">
+      <span class="progress-text" id="progressText">0 / 7 erledigt</span>
+      <div class="bar"><div class="bar-fill" id="barFill"></div></div>
+      <button class="reset" id="resetBtn" type="button">Zurücksetzen</button>
+    </div>
+
+    <div id="steps">
+
+      <div class="step" data-step="1">
+        <label class="box"><input type="checkbox"></label>
+        <div class="step-body">
+          <span class="step-num">Schritt 1</span>
+          <p class="step-title">VS Code herunterladen</p>
+          <p>Visual Studio Code ist dein Code-Editor und das Zuhause aller weiteren Tools.</p>
+          <a class="btn-link" href="https://code.visualstudio.com/download" target="_blank" rel="noopener">Zur Download-Seite →</a>
+        </div>
+      </div>
+
+      <div class="step" data-step="2">
+        <label class="box"><input type="checkbox"></label>
+        <div class="step-body">
+          <span class="step-num">Schritt 2</span>
+          <p class="step-title">GitHub-Account erstellen</p>
+          <p>
+            GitHub brauchst du in VS Code gleich mehrfach: für die
+            <strong>Versionsverwaltung</strong> (Änderungen speichern und bei Bedarf zurückrollen),
+            für die <strong>Anmeldung/Authentifizierung</strong> von Erweiterungen und
+            um den <strong>Projekt-Template-Ordner</strong> aus dem Repository zu beziehen.
+          </p>
+          <a class="btn-link" href="https://github.com/signup" target="_blank" rel="noopener">Account erstellen →</a>
+        </div>
+      </div>
+
+      <div class="step" data-step="3">
+        <label class="box"><input type="checkbox"></label>
+        <div class="step-body">
+          <span class="step-num">Schritt 3</span>
+          <p class="step-title">Claude Code Plugin in VS Code installieren</p>
+          <p>Suche im VS-Code-Erweiterungs-Marktplatz nach „Claude Code" und installiere das Plugin.</p>
+          <div class="note">
+            <strong>Hinweis:</strong> Alternativ geht vermutlich auch Codex von OpenAI – das hat Tobias allerdings noch nicht getestet.
+          </div>
+        </div>
+      </div>
+
+      <div class="step" data-step="4">
+        <label class="box"><input type="checkbox"></label>
+        <div class="step-body">
+          <span class="step-num">Schritt 4</span>
+          <p class="step-title">Projekt-Template-Ordner herunterladen</p>
+          <p>Hol dir die Vorlage, mit der jedes neue Projekt startet.</p>
+          <a class="btn-link" href="https://github.com/gaertner23/-Workspace-Template-/" target="_blank" rel="noopener">Template-Ordner öffnen →</a>
+        </div>
+      </div>
+
+      <div class="step" data-step="5">
+        <label class="box"><input type="checkbox"></label>
+        <div class="step-body">
+          <span class="step-num">Schritt 5</span>
+          <p class="step-title">Template öffnen & in Claude anmelden</p>
+          <p>Öffne den Template-Ordner in VS Code, starte das Claude Code Plugin und melde dich in Claude an.</p>
+        </div>
+      </div>
+
+      <div class="step" data-step="6">
+        <label class="box"><input type="checkbox"></label>
+        <div class="step-body">
+          <span class="step-num">Schritt 6</span>
+          <p class="step-title">Skills installieren</p>
+          <p>
+            Installiere die Skills am besten direkt mit Claude Code – und zwar
+            <strong>global</strong>, damit sie in jedem Projekt verfügbar sind.
+          </p>
+          <a class="btn-link" href="https://github.com/mattpocock/skills/tree/main" target="_blank" rel="noopener">Skills ansehen →</a>
+        </div>
+      </div>
+
+      <div class="step" data-step="7">
+        <label class="box"><input type="checkbox"></label>
+        <div class="step-body">
+          <span class="step-num">Schritt 7</span>
+          <p class="step-title">VS Code neu starten</p>
+          <p>Starte VS Code neu, damit alle frisch installierten Skills gefunden werden.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="finish">
+      <h2>🎉 Jetzt bist du einsatzbereit</h2>
+      <p>Ab hier kann ein neues Projekt starten:</p>
+      <ol>
+        <li>Den <strong>Projektordner duplizieren</strong> und in den Namen deines Projekts umbenennen.</li>
+        <li>Im Claude Code Plugin deine Pläne beschreiben – nutze dafür den <span class="pill">Plan Mode</span>.</li>
+      </ol>
+    </div>
+
+    <section class="tips">
+      <h2>💡 Praxistipps fürs Vibecoding</h2>
+      <p class="lead">Ein paar Gewohnheiten, mit denen die Zusammenarbeit mit Claude deutlich zuverlässiger wird.</p>
+
+      <div class="tip">
+        <h3><span class="ic">📊</span> Auf das Kontextfenster achten</h3>
+        <p>
+          Das Kontextfenster ist das Arbeitsgedächtnis von Claude – und es ist begrenzt.
+          Behalte die Token-Anzeige in der Statusleiste im Blick; mit <code>/context</code>
+          siehst du genau, wofür die Tokens draufgehen. Faustregel: <strong>ab ca. 50&nbsp;% voll
+          lässt die Qualität nach</strong> und die Antworten werden teurer („Context-Tax"). Also
+          rechtzeitig handeln, statt zu warten, bis es übergeht.
+        </p>
+      </div>
+
+      <div class="tip">
+        <h3><span class="ic">🔄</span> Rechtzeitig aufräumen statt überladen</h3>
+        <p>
+          Wenn das Kontextfenster zu voll wird: erst den <strong>handoff-Skill</strong> nutzen,
+          um den aktuellen Stand sauber zu sichern (was erledigt ist, was als Nächstes kommt),
+          und dann mit <strong>Clear Conversation</strong> (<code>/clear</code>) ein frisches
+          Kontextfenster starten. So nimmst du nur das Wichtige mit und lässt den Ballast zurück.
+          Für Zwischenstände an natürlichen Punkten kannst du auch <code>/compact</code> nutzen.
+        </p>
+      </div>
+
+      <div class="tip">
+        <h3><span class="ic">🎯</span> Eine Aufgabe pro Session</h3>
+        <p>
+          Halte Aufgaben klein und klar abgegrenzt. Statt eine Session für alles zu missbrauchen,
+          beginne pro Thema/Aufgabe lieber eine frische Session. Das hält den Kontext fokussiert
+          und die Ergebnisse präziser.
+        </p>
+      </div>
+
+      <div class="tip">
+        <h3><span class="ic">🧭</span> Immer erst im Plan Mode denken</h3>
+        <p>
+          Lass Claude bei allem, was nicht trivial ist, zuerst einen <strong>Plan</strong> erstellen
+          und stelle Rückfragen, bis der Plan wirklich passt. Planen kostet kurz Zeit, spart aber viel –
+          weil von Anfang an das Richtige gebaut wird.
+        </p>
+      </div>
+
+      <div class="tip">
+        <h3><span class="ic">🪜</span> Kleine, getestete Schritte</h3>
+        <p>
+          Lieber viele kleine, geprüfte Änderungen als ein großer ungeprüfter Wurf. Verifiziere
+          jeden Schritt (laufen lassen, testen), bevor es weitergeht. So baust du nicht auf Fehlern auf.
+        </p>
+      </div>
+
+      <div class="tip">
+        <h3><span class="ic">🌀</span> Den „Doom Loop" erkennen</h3>
+        <p>
+          Klassische Falle: Der Agent sagt „Bug behoben", ist er aber nicht. Verlass dich nicht aufs
+          Wort – lass <strong>verifizieren</strong> und zeig Claude die konkrete Fehlermeldung. Wenn sich
+          die KI im Kreis dreht, hilft oft ein frischer Start (handoff + <code>/clear</code>) mehr als
+          der zehnte Korrekturversuch.
+        </p>
+      </div>
+
+      <div class="tip">
+        <h3><span class="ic">📄</span> Plan &amp; Doku pflegen</h3>
+        <p>
+          <code>CLAUDE.md</code> und der <code>Projektplan.md</code> werden bei jedem Start gelesen –
+          sie sind der dauerhafte Kontext, den Claude nicht aus dem Code erraten kann. Halte dort
+          Ziele, Entscheidungen und Learnings fest, dann findet sich jede neue Session sofort zurecht.
+        </p>
+      </div>
+
+      <div class="tip">
+        <h3><span class="ic">👀</span> Diffs nicht blind übernehmen</h3>
+        <p>
+          Du bleibst der Mensch im Loop. Überflieg die vorgeschlagenen Änderungen, frag bei
+          Unklarheiten nach und übernimm nichts, was du nicht zumindest grob verstehst.
+        </p>
+      </div>
+    </section>
+
+    <footer>Setup-Checkliste · Dein Fortschritt wird automatisch in diesem Browser gespeichert.</footer>
+  </div>
+
+  <script>
+    (function () {
+      var STORAGE_KEY = "setup-checkliste-fortschritt";
+      var steps = Array.prototype.slice.call(document.querySelectorAll(".step"));
+      var total = steps.length;
+      var progressText = document.getElementById("progressText");
+      var barFill = document.getElementById("barFill");
+      var resetBtn = document.getElementById("resetBtn");
+
+      function load() {
+        try {
+          return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+        } catch (e) {
+          return {};
+        }
+      }
+
+      function save(state) {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        } catch (e) { /* localStorage nicht verfügbar – kein Problem */ }
+      }
+
+      function update() {
+        var done = 0;
+        var state = {};
+        steps.forEach(function (step) {
+          var box = step.querySelector('input[type="checkbox"]');
+          var checked = box.checked;
+          step.classList.toggle("done", checked);
+          state[step.getAttribute("data-step")] = checked;
+          if (checked) done++;
+        });
+        save(state);
+        progressText.textContent = done + " / " + total + " erledigt";
+        var pct = total ? Math.round((done / total) * 100) : 0;
+        barFill.style.width = pct + "%";
+        barFill.classList.toggle("complete", done === total && total > 0);
+      }
+
+      // Gespeicherten Zustand wiederherstellen
+      var saved = load();
+      steps.forEach(function (step) {
+        var box = step.querySelector('input[type="checkbox"]');
+        if (saved[step.getAttribute("data-step")]) box.checked = true;
+        box.addEventListener("change", update);
+      });
+
+      resetBtn.addEventListener("click", function () {
+        steps.forEach(function (step) {
+          step.querySelector('input[type="checkbox"]').checked = false;
+        });
+        update();
+      });
+
+      update();
+    })();
+  </script>
+</body>
+</html>
