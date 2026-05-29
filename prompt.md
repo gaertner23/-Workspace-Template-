@@ -1,0 +1,1 @@
+Lies @Projektplan.md, finde das nächste offene Aufgabe und fasse in 2-3 Sätzen zusammen, was wir heute bauen. Dann geh in den Plan Mode und plane die Implementierung im Detail. Warte auf mein OK bevor du Code schreibst.
